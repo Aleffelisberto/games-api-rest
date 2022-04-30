@@ -121,7 +121,7 @@ app.post('/game', auth, (req, res) => {
   }
 })
 
-app.post('/auth', auth, (req, res) => {
+app.post('/auth', (req, res) => {
   const { email, password } = req.body
 
   if (email != undefined) {
