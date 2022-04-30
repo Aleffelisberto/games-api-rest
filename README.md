@@ -52,3 +52,46 @@ Para que uma API seja RESTful, ela precisa estar em conformidade com os seguinte
 ## Webservices
 
 Webservices são APIs que rodam sobre o protocolo HTTP.
+
+## Autenticação usando JWT (JSON Web Token)
+
+JWT é um padrão aberto que define um jeito compacto para transmitir informações seguramente com um objeto JSON. Essa informação pode ser verificada pois está assinada digitalmente. JWTs podem ser assinados usando um secredo ou chave pública/privada usando RSA ou ECDSA.
+
+### Quando usar JWT ?
+
+- Authorization: Esse é o cenário mais comum para usar JWT. Uma vez que o usuário está logado, cada requisição subsequente vai incluir a JWT, permitindo ao usuário acessar rotas, serviços, e recursos que são permitidos através desse token.
+
+- Troca de informações: JWT é um ótimo jeito de transmitir informações seguramente.
+
+### Qual é a estrutura do JWT ?
+
+Tokens JWT são divididos em 3 partes separados por '.'
+
+```
+xxxxx.yyyyy.zzzzz
+```
+
+- Header: O header é tipicamente dividido em duas partes: o tipo do token, que é JWT, e a assinatura do algorítmo que é usado, como HMAC SHA256 ou RSA.
+
+```json
+{
+  "alg": "RSA",
+  "typ": "JWT"
+}
+```
+
+- Payload: No payload, ficam as reinvidicações. Reinvidicações são estados sobre uma entidade (normalmente, o usuário) e dados adicionais.
+
+```json
+{
+  "sub": "123",
+  "name": "Alefsandler Felisberto",
+  "admin": true
+}
+```
+
+- Signature: A assinatura é usada para verificar que a mensagem não mudou durante o processo, e, no caso de tokens assinados com uma chave privada, também pode ser verificado se o par que enviou a JWT é quem diz que é.
+
+### Motivações para uso de JWT
+
+Comparando a SWT (Simple Web Tokens) e SAML (Security Assertion Markup Language Tokens), temos que, ao usar JSON ao invés de XML, fazemos com que o token fique mais compacto e menos verboso, além da conversão de JSON usando linguagens de programação se torna muito mais simples.
