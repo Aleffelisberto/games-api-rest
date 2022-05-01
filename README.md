@@ -95,3 +95,47 @@ xxxxx.yyyyy.zzzzz
 ### Motivações para uso de JWT
 
 Comparando a SWT (Simple Web Tokens) e SAML (Security Assertion Markup Language Tokens), temos que, ao usar JSON ao invés de XML, fazemos com que o token fique mais compacto e menos verboso, além da conversão de JSON usando linguagens de programação se torna muito mais simples.
+
+## HATEOAS
+
+HATEOAS é um componente que faz parte da arquitetura REST, cujo objetivo é ajudar os clientes a consumirem uma API sem a necessidade de conhecimento prévio.
+
+O acrônimo HATEOAS vem de Hypermedia As the Engine Of Application State e o termo "hypermedia" no seu nome já da uma ideia de como este componente funciona em uma aplicação RESTful. Ao ser implementado, a API passa a fornecer links que indicarão aos clientes como navegar através dos seus recursos.
+
+Com isso, o cliente não precisa ter um conhecimento produnfo da API, basta conhecer a URL de inicial e partir dos links fornecidos poderá acessar todos os recursos de forma circular, se guiando através das requisições realizadas.
+
+#### Exemplo simples do HATEOAS
+
+```json
+{
+  "cursos": [
+    {
+      "id": 1,
+      "nome": "C# (C Sharp)",
+      "aulas": "api.treinaweb.com.br/cursos/1/aulas"
+    },
+    {
+      "id": 2,
+      "nome": "PHP",
+      "aulas": "api.treinaweb.com.br/cursos/2/aulas"
+    },
+    {
+      "id": 3,
+      "nome": "Java",
+      "aulas": "api.treinaweb.com.br/cursos/3/aulas"
+    }
+  ]
+}
+```
+
+### Especififação do HATEOAS
+
+##### RFC 5988
+
+De acordo com essa especificação, cada link deve ter as informações:
+
+- URI: Cada link deve conter uma URI, representada no atributo `href`;
+
+- Tipo de relação: Descreve como a URI se relaciona com o recurso atual, representado pelo atributo `rel`.
+
+- Atributos para URI: Para descrever melhor a URI podem ser adicionados atributos comom `hreflang`, `media`, `title` e `type`
