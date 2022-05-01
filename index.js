@@ -74,10 +74,45 @@ let DB = {
 
 // return all games
 app.get('/games', auth, (req, res) => {
+  // applying the HATEOAS concepts
+  let gamesResponse = DB.games.map(game => {
+    return {
+      ...game,
+      _links: [
+        {
+          type: 'GET',
+          rel: 'get_game',
+          uri: `localhost:3000/game/${game.id}`
+        },
+        {
+          type: 'PUT',
+          rel: 'edit_game',
+          uri: `localhost:3000/game/${game.id}`
+        },
+        {
+          type: 'DELETE',
+          rel: 'delete_game',
+          uri: `localhost:3000/game/${game.id}`
+        }
+      ]
+    }
+  })
+
+  gamesResponse = {
+    ...gamesResponse,
+    _links: [
+      {
+        type: 'POST',
+        rel: 'post_game',
+        uri: 'localhost:3000/game'
+      }
+    ]
+  }
+
   res.statusCode = 202
   res.json({
     user: req.loggedUser,
-    games: DB.games
+    games: gamesResponse
   })
 })
 
@@ -85,9 +120,29 @@ app.get('/games', auth, (req, res) => {
 app.get('/game/:id', auth, (req, res) => {
   const { id } = req.params
   if (!isNaN(id)) {
-    const result = DB.games.filter(game => game.id === parseInt(id))
-    console.log(result)
+    let result = DB.games.filter(game => game.id === parseInt(id))
+    result = result
     if (result.length > 0) {
+      result = {
+        ...result[0],
+        _links: [
+          {
+            type: 'GET',
+            rel: 'get_game',
+            uri: `localhost:3000/game/${result.id}`
+          },
+          {
+            type: 'PUT',
+            rel: 'edit_game',
+            uri: `localhost:3000/game/${result.id}`
+          },
+          {
+            type: 'DELETE',
+            rel: 'delete_game',
+            uri: `localhost:3000/game/${result.id}`
+          }
+        ]
+      }
       res.statusCode = 202
       res.json({
         user: req.loggedUser,
@@ -99,8 +154,6 @@ app.get('/game/:id', auth, (req, res) => {
   } else {
     res.sendStatus(400)
   }
-
-  res.statusCode
 })
 
 // create a game
